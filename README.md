@@ -4,7 +4,7 @@
 
 ## 1. Fonctionnalités Implémentées
 
-*   Affichage de la liste des actualités françaises (titre et image).
+*   Affichage de la liste des actualités (titre et image).
 *   Affichage de la vue de détail d'une actualité (titre, image, description, source).
 *   Lien cliquable dans la vue de détail pour consulter l'article complet.
 *   Gestion du mode sombre (Dark Mode).
@@ -13,21 +13,20 @@
 ---
 ## 2. Choix Techniques et Architecturaux
 
-Cette version du projet affine l'architecture initiale pour adhérer plus strictement aux principes SOLID et aux meilleures pratiques de l'écosystème SwiftUI.
 
 ### Architecture Globale : Clean Architecture + MVVM + Coordinator 
 
-*   **Clean Architecture :** Le projet conserve est conçu en trois couches (`Domain`, `Data`, `Presentation`), assurant une excellente séparation.
+*   **Clean Architecture :** Le projet est conçu en trois couches (`Domain`, `Data`, `Presentation`), assurant une excellente séparation.
 
-*   **Navigation 100% SwiftUI :** La navigation utiliser la stack native de SwiftUI.
-    *   **`NavigationStack` & `NavigationPath` :** Le `AppCoordinator` gère un `NavigationPath` qui est lié à un `NavigationStack` dans la vue racine. Toute la navigation est programmatique, testable et découplée des vues.
+*   **Navigation 100% SwiftUI :** La navigation utilise la stack native de SwiftUI.
+    *   **`NavigationStack` & `NavigationPath` :** Le `AppCoordinator` gère un `NavigationPath` qui est lié à un `NavigationStack` dans la vue racine. Toute la navigation est testable et découplée des vues.
     *   **`AppCoordinator` :** Le coordinateur centralise l'état de la navigation. Les vues lui demandent de naviguer vers une `Route`, et le coordinateur met à jour son `NavigationPath`, ce qui déclenche la mise à jour de l'UI par SwiftUI.
 
 *   **Injection de Dépendances :**
     *   **`DIContainer` :** Un conteneur de dépendances a été mis en place pour centraliser la création et l'injection de tous les services, repositories, et use cases, rendant le code plus modulaire et facile à tester.
 
 *   **Configuration Centralisée :**
-    *   **`AppConstants.swift` :** Toutes les valeurs de configuration (URLs, clé API, valeurs par défaut) sont stockées dans un fichier unique pour facilite la maintenance.
+    *   **`AppConstants.swift` :** Toutes les valeurs de configuration (URLs, clé API, valeurs par défaut) sont stockées dans un fichier unique pour faciliter la maintenance.
 
 ### Stack Technique
 
