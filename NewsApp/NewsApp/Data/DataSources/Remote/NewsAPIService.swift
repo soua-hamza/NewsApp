@@ -67,10 +67,10 @@ actor NewsAPIService: NewsAPIServiceProtocol {
             throw NetworkError.requestFailed(error)
         }
 
-        return try Self.decodeResponse(from: data)
+        return try self.decodeResponse(from: data)
     }
 
-    private static func decodeResponse(from data: Data) throws -> NewsApiResponseDTO {
+    private nonisolated func decodeResponse(from data: Data) throws -> NewsApiResponseDTO {
         do {
             let decoder = JSONDecoder()
             return try decoder.decode(NewsApiResponseDTO.self, from: data)
