@@ -19,7 +19,7 @@ protocol NewsAPIServiceProtocol {
     func getTopHeadlines(country: String) async throws -> NewsApiResponseDTO
 }
 
-class NewsAPIService: NewsAPIServiceProtocol {
+actor NewsAPIService: NewsAPIServiceProtocol {
 
     private let session: URLSession
 
@@ -53,21 +53,29 @@ class NewsAPIService: NewsAPIServiceProtocol {
 
         let request = URLRequest(url: url)
 
+        let data: Data
         do {
-            let (data, response) = try await session.data(for: request)
-
+            let (responseData, response) = try await session.data(for: request)
             guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
                 throw NetworkError.invalidResponse
             }
-
-            do {
-                let apiResponse = try JSONDecoder().decode(NewsApiResponseDTO.self, from: data)
-                return apiResponse
-            } catch {
-                throw NetworkError.decodingError(error)
-            }
+            data = responseData
         } catch {
+            if error is NetworkError {
+                throw error
+            }
             throw NetworkError.requestFailed(error)
+        }
+
+        return try Self.decodeResponse(from: data)
+    }
+
+    private static func decodeResponse(from data: Data) throws -> NewsApiResponseDTO {
+        do {
+            let decoder = JSONDecoder()
+            return try decoder.decode(NewsApiResponseDTO.self, from: data)
+        } catch {
+            throw NetworkError.decodingError(error)
         }
     }
 }
