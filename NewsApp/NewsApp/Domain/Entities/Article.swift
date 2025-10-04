@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct Article: Equatable, Identifiable, Hashable {
+struct Article: Equatable, Identifiable, Hashable, Sendable {
     var id: URL { articleUrl }
 
     let title: String

@@ -19,7 +19,7 @@ protocol NewsAPIServiceProtocol {
     func getTopHeadlines(country: String) async throws -> NewsApiResponseDTO
 }
 
-class NewsAPIService: NewsAPIServiceProtocol {
+actor NewsAPIService: NewsAPIServiceProtocol {
 
     private let session: URLSession
 
