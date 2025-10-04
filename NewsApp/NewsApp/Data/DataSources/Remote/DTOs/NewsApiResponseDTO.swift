@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NewsApiResponseDTO: Codable, Sendable {
+struct NewsApiResponseDTO: Codable {
     let status: String
     let totalResults: Int
     let articles: [ArticleDTO]

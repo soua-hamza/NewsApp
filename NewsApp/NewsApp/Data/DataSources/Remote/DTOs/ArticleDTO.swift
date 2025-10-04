@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ArticleDTO: Codable, Sendable {
+struct ArticleDTO: Codable {
     let source: SourceDTO
     let author: String?
     let title: String?
@@ -18,7 +18,7 @@ struct ArticleDTO: Codable, Sendable {
     let content: String?
 }
 
-struct SourceDTO: Codable, Sendable {
+struct SourceDTO: Codable {
     let id: String?
     let name: String?
 }

@@ -16,6 +16,7 @@ enum Route: Hashable {
 final class AppCoordinator: ObservableObject {
 
     @Published var path = NavigationPath()
+    @Published var errorMessage: String?
 
     private let diContainer: DIContainer
 

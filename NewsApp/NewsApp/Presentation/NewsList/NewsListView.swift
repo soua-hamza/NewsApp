@@ -18,39 +18,47 @@ struct NewsListView: View {
     }
 
     var body: some View {
-            Group {
-                switch viewModel.state {
-                case .loading:
-                    ProgressView("Loading news...")
-                case .success(let articles):
-                    List(articles) { article in
-                        Button(action: { coordinator.navigateTo(.detail(article: article)) }) {
-                            NewsRowView(article: article)
-                        }
-                        .buttonStyle(.plain)
-                    }.refreshable {
-                        viewModel.handleRefresh()
+        Group {
+            switch viewModel.state {
+            case .loading:
+                ProgressView("Loading news...")
+            case .success(let articles):
+                List(articles) { article in
+                    Button(action: { coordinator.navigateTo(.detail(article: article)) }) {
+                        NewsRowView(article: article)
                     }
-                case .error(let message):
-                    ScrollView {
-                        VStack(spacing: 10) {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .font(.largeTitle)
-                                .foregroundColor(.red)
-                            Text(message)
-                                .font(.headline)
-                                .multilineTextAlignment(.center)
-                        }
-                        .padding()
-                        .frame(minHeight: 300)
-                    }.refreshable {
-                        viewModel.handleRefresh()
-                    }
+                    .buttonStyle(.plain)
+                }
+                .refreshable {
+                    viewModel.handleRefresh()
+                }
+            case .error:
+                // The view is now mostly blank in the error state, as the alert will be the primary feedback.
+                // The ScrollView is kept to allow the user to use the "pull to refresh" gesture.
+                ScrollView {
+                    Text("").frame(height: 1)
+                }
+                .refreshable {
+                    viewModel.handleRefresh()
                 }
             }
+        }
         .navigationTitle("USA News")
         .onAppear {
             viewModel.onAppear()
+        }
+        .onChange(of: viewModel.state) { _, newState in
+            if case .error(let message, _) = newState {
+                coordinator.errorMessage = message
+            }
+        }
+        .alert("Error", isPresented: .init(
+            get: { coordinator.errorMessage != nil },
+            set: { _ in coordinator.errorMessage = nil }
+        )) {
+            Button("OK") {}
+        } message: {
+            Text(coordinator.errorMessage ?? "An unknown error occurred.")
         }
     }
 }

@@ -11,7 +11,7 @@ import Combine
 enum NewsListState: Equatable {
     case loading
     case success(articles: [Article])
-    case error(message: String)
+    case error(message: String, id: UUID = UUID())
 
     static func == (lhs: NewsListState, rhs: NewsListState) -> Bool {
         switch (lhs, rhs) {
@@ -19,8 +19,8 @@ enum NewsListState: Equatable {
             return true
         case (let .success(lhsArticles), let .success(rhsArticles)):
             return lhsArticles == rhsArticles
-        case (let .error(lhsMessage), let .error(rhsMessage)):
-            return lhsMessage == rhsMessage
+        case (let .error(_, lhsId), let .error(_, rhsId)):
+            return lhsId == rhsId
         default:
             return false
         }
